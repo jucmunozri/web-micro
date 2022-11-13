@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  # micro ...........................
+  micro:
+    container_name: "micro"
+    image: jucmunozri/web:2
+    ports:
+      - "3001:3001"
+    networks:
+      - web-red
+    depends_on:
+      - web-db
+    restart: always
+  # web ...............................
+  web:
+    container_name: "web"
+    image: jucmunozri/web:1
+    ports:
+      - "3000:3000"
+    networks:
+      - web-red
+    depends_on:
+      - web-db
+    restart: always
+  # web-db ................................
+  web-db:
+    container_name: "web-db"
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - web-red
+    volumes:
+      - mongo-database:/data/db
+
+volumes:
+  mongo-database:
+networks:
+  web-red:
